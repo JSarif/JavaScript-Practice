@@ -35,7 +35,8 @@ function pAequorFactory(num, array) {
                 }
             }
             let percentage = (matchedDNACount / this.dna.length) * 100;
-            return `specimen #${this.specimenNum} and specimen #${newSpecimen.specimenNum} have ${percentage}% DNA in common`;
+            // console.log(`specimen #${this.specimenNum} and specimen #${newSpecimen.specimenNum} have ${percentage}% DNA in common`)
+            return percentage;
         },
         willLikelySurvive() {
             let countCorG = 0;
@@ -50,6 +51,26 @@ function pAequorFactory(num, array) {
             } else {
                 return false;
             }
+        },
+        complementStrand() {
+            let complementStrand = [];
+            for (let i = 0; i < this.dna.length; i++) {
+                switch (this.dna[i]) {
+                    case "A":
+                        complementStrand.push("T");
+                        break;
+                    case "T":
+                        complementStrand.push("A");
+                        break;
+                    case "G":
+                        complementStrand.push("C");
+                        break;
+                    case "C":
+                        complementStrand.push("G");
+                        break;
+                }
+            }
+            return complementStrand;
         },
     };
 }
@@ -69,6 +90,23 @@ while (studyArray.length < 30) {
     i++;
 }
 
+function findMostCommonPAequors(pAequorArray) {
+    let highestPercentage = 0;
+    let mostRelatedPair = [];
+
+    for (let i = 0; i < pAequorArray.length - 1; i++) {
+        for (let j = i + 1; j < pAequorArray.length; j++) {
+            let percentage = pAequorArray[i].compareDNA(pAequorArray[j]);
+            if (percentage > highestPercentage) {
+                highestPercentage = percentage;
+                mostRelatedPair = [pAequorArray[i], pAequorArray[j]];
+            }
+        }
+    }
+
+    return mostRelatedPair;
+}
+
 // Test this method by creating an instance of pAequor and running the different methods
 const pAequor = pAequorFactory(1, mockUpStrand());
 // console.log(pAequor.dna);
@@ -76,5 +114,8 @@ const pAequor = pAequorFactory(1, mockUpStrand());
 // console.log(pAequor.willLikelySurvive());
 // console.log(pAequor.compareDNA(pAequorFactory(2, mockUpStrand())));
 
-console.log(studyArray);
-console.log(studyArray.length);
+// console.log(studyArray);
+// console.log(studyArray.length);
+// console.log(pAequor.dna);
+// console.log(pAequor.complementStrand());
+// console.log(findMostCommonPAequors(studyArray));
